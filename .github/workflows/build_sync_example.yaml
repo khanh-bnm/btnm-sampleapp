@@ -1,0 +1,29 @@
+name: Build / Sync
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v.*
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    steps:
+      - run: echo "Build"
+  sync-dev:
+    if: ${{ github.ref_name == 'main' }} 
+    name: Sync Dev
+    needs: build
+    runs-on: ubuntu-22.04
+    steps:
+      - run: echo "Sync Dev"
+      
+  sync-staging:
+    if: ${{ github.ref_type	== 'tag' }} 
+    name: Sync Staging
+    runs-on: ubuntu-22.04
+    needs: build
+    steps:
+      - run: echo "Sync Staging"
