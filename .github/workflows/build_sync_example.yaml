@@ -11,7 +11,12 @@ jobs:
     name: Build
     runs-on: ubuntu-22.04
     steps:
-      - run: echo "Build"
+      - run: |
+        IMAGE_TAG=$(echo ${GITHUB_SHA} | cut -c1-8)
+        if [ "${GITHUB_REF_TYPE}" == "tag" ]; then
+          IMAGE_TAG="${GITHUB_REF_NAME}"
+        fi
+        echo "Build with tag $IMAGE_TAG"
   sync-dev:
     if: ${{ github.ref_name == 'main' }} 
     name: Sync Dev
@@ -24,7 +29,7 @@ jobs:
           - service
           - service-worker
     steps:
-      - run: echo "Sync Dev {{ matrix.service }}"
+      - run: echo "Sync Dev ${{ matrix.service }}"
 
   sync-staging:
     if: ${{ github.ref_type	== 'tag' }} 
@@ -38,4 +43,4 @@ jobs:
           - service
           - service-worker
     steps:
-      - run: echo "Sync Staging {{ matrix.service }}"
+      - run: echo "Sync Staging ${{ matrix.service }}"
