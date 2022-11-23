@@ -5,7 +5,7 @@ on:
     branches:
       - main
     tags:
-      - v.*
+      - v.**
 jobs:
   build:
     name: Build
@@ -17,13 +17,25 @@ jobs:
     name: Sync Dev
     needs: build
     runs-on: ubuntu-22.04
+    strategy:
+      max-parallel: 1
+      matrix:
+        service:
+          - service
+          - service-worker
     steps:
-      - run: echo "Sync Dev"
-      
+      - run: echo "Sync Dev {{ matrix.service }}"
+
   sync-staging:
     if: ${{ github.ref_type	== 'tag' }} 
     name: Sync Staging
     runs-on: ubuntu-22.04
     needs: build
+    strategy:
+      max-parallel: 1
+      matrix:
+        service:
+          - service
+          - service-worker
     steps:
-      - run: echo "Sync Staging"
+      - run: echo "Sync Staging {{ matrix.service }}"
