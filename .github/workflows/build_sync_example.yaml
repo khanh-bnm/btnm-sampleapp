@@ -18,87 +18,14 @@ jobs:
           fi
           echo "Build with tag $IMAGE_TAG"
           
-  update-dev:
-    if: ${{ github.ref_name == 'main' }} 
-    name: Update Dev
-    needs: build
-    runs-on: ubuntu-22.04
+  sync:
+    name: Sync
+    uses: khanh-bnm/common-workflows/.github/workflows/sync.yaml@main
     strategy:
       max-parallel: 1
       matrix:
         service:
           - service
           - service-worker
-    steps:
-      - run: echo "Update Dev ${{ matrix.service }}"
-
-  sync-dev:
-    name: Sync Dev
-    needs: update-dev
-    environment: dev
-    runs-on: ubuntu-22.04
-    strategy:
-      max-parallel: 1
-      matrix:
-        service:
-          - service
-          - service-worker
-    steps:
-      - run: echo "Sync Dev ${{ matrix.service }}"
-
-  update-staging:
-    if: ${{ github.ref_type	== 'tag' }} 
-    name: Update Staging
-    runs-on: ubuntu-22.04
-    needs: build
-    strategy:
-      max-parallel: 1
-      matrix:
-        service:
-          - service
-          - service-worker
-    steps:
-      - run: echo "Update Staging ${{ matrix.service }}"
-
-  sync-staging:
-    name: Sync Staging
-    runs-on: ubuntu-22.04
-    needs: update-staging
-    environment: staging 
-    strategy:
-      max-parallel: 1
-      matrix:
-        service:
-          - service
-          - service-worker
-    steps:
-      - run: echo "Sync Staging ${{ matrix.service }}"
-  update-prod:
-    if: ${{ github.ref_type	== 'tag' }} 
-    name: Update Prod
-    runs-on: ubuntu-22.04
-    needs:
-      - build
-      - sync-staging
-    strategy:
-      max-parallel: 1
-      matrix:
-        service:
-          - service
-          - service-worker
-    steps:
-      - run: echo "Update Prod ${{ matrix.service }}"
-      
-  sync-prod:
-    name: Sync Prod
-    runs-on: ubuntu-22.04
-    needs: update-prod
-    environment: prod 
-    strategy:
-      max-parallel: 1
-      matrix:
-        service:
-          - service
-          - service-worker
-    steps:
-      - run: echo "Sync Prod ${{ matrix.service }}"
+    with:
+      service: ${{ matrix.service }}
