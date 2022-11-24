@@ -17,6 +17,7 @@ jobs:
             IMAGE_TAG=$GITHUB_REF_NAME
           fi
           echo "Build with tag $IMAGE_TAG"
+          
   update-dev:
     if: ${{ github.ref_name == 'main' }} 
     name: Update Dev
@@ -30,9 +31,10 @@ jobs:
           - service-worker
     steps:
       - run: echo "Update Dev ${{ matrix.service }}"
+
   sync-dev:
     name: Sync Dev
-    needs: sync-dev
+    needs: update-dev
     environment: dev
     runs-on: ubuntu-22.04
     strategy:
