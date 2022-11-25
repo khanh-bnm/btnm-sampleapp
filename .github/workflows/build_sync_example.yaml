@@ -21,7 +21,6 @@ jobs:
   sync:
     name: Sync
     uses: khanh-bnm/common-workflows/.github/workflows/sync.yaml@main
-    continue-on-error: true
     strategy:
       fail-fast: false
       max-parallel: 1
