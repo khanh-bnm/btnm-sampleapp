@@ -1,0 +1,56 @@
+name: build_deploy
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - run: |
+          IMAGE_TAG=$(echo $GITHUB_SHA | cut -c1-8)
+          if [ "$GITHUB_REF_TYPE" == "tag" ]; then
+            IMAGE_TAG=$GITHUB_REF_NAME
+          fi
+          echo "Build with tag $IMAGE_TAG"
+  dev:deploy:
+    if: ${{ github.ref_name == 'main' }}
+    needs: build
+    environment: dev
+    strategy:
+      max-parallel: 1
+      matrix:
+        service:
+          - service
+          - service-worker
+    steps:
+      - run: echo "Deploy dev ${{ inputs.service }}"
+  staging:deploy:
+    if: ${{ github.ref_type	== 'tag' }} 
+    needs: build
+    environment: staging
+    strategy:
+      max-parallel: 1
+      matrix:
+        service:
+          - service
+          - service-worker
+    steps:
+      - run: echo "Deploy staging ${{ inputs.service }}"
+  prod:deploy:
+    if: ${{ github.ref_type	== 'tag' }} 
+    needs: 
+      - build
+      - staging
+    environment: prod
+    strategy:
+      max-parallel: 1
+      matrix:
+        service:
+          - service
+          - service-worker
+    steps:
+      - run: echo "Deploy prod ${{ inputs.service }}"
