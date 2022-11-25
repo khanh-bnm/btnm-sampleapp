@@ -46,7 +46,7 @@ jobs:
     if: ${{ github.ref_type	== 'tag' }} 
     needs: 
       - build
-      - staging
+      - staging-deploy
     environment: prod
     strategy:
       max-parallel: 1
