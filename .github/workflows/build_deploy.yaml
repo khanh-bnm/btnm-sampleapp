@@ -26,6 +26,7 @@ jobs:
         service:
           - service
           - service-worker
+    runs-on: ubuntu-22.04
     steps:
       - run: echo "Deploy dev ${{ inputs.service }}"
   staging:deploy:
@@ -38,6 +39,7 @@ jobs:
         service:
           - service
           - service-worker
+    runs-on: ubuntu-22.04
     steps:
       - run: echo "Deploy staging ${{ inputs.service }}"
   prod:deploy:
@@ -52,5 +54,6 @@ jobs:
         service:
           - service
           - service-worker
+    runs-on: ubuntu-22.04
     steps:
       - run: echo "Deploy prod ${{ inputs.service }}"
