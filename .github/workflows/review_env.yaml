@@ -21,4 +21,4 @@ jobs:
       name: review
       url: https://pr-sample-${{ github.event.pull_request.number }}.review.example.com
     steps:
-      - run: echo "running"
+      - run: echo "running  ${{ github.event.pull_request.number }}"
