@@ -1,10 +1,11 @@
 on:
   pull_request:
-    branches:
-      - 'review/**'
+    types:
+      - labeled
 
 jobs:
   build:
+    if: ${{ github.event.label.name == 'review' }}
     runs-on: ubuntu-22.04
     steps:
       - run: |
@@ -16,6 +17,6 @@ jobs:
   review-start:
     needs: build
     environment:
-      name: ${{ env.GITHUB_REF_NAME }}
+      name: review/${{ env.GITHUB_REF_NAME }}
     steps:
       - run: echo "running"
