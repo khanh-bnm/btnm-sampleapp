@@ -16,6 +16,7 @@ jobs:
           echo "Build with tag $IMAGE_TAG"
   review-start:
     needs: build
+    runs-on: ubuntu-22.04
     environment:
       name: review
       url: https://pr-sample-${{ github.event.pull_request.number }}.review.example.com
