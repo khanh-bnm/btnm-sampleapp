@@ -17,6 +17,7 @@ jobs:
   review-start:
     needs: build
     environment:
-      name: review/${{ env.GITHUB_REF_NAME }}
+      name: review
+      url: https://pr-sample-${{ github.event.pull_request.number }}.review.example.com
     steps:
       - run: echo "running"
