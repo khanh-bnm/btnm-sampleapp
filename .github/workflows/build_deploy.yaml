@@ -30,7 +30,7 @@ jobs:
     steps:
       - run: echo "Deploy dev ${{ inputs.service }}"
   staging-deploy:
-    if: ${{ github.ref_type	== 'tag' }} 
+    if: ${{ startsWith(github.ref, 'refs/tags/rc-') }}
     needs: build
     environment: staging
     strategy:
@@ -43,7 +43,7 @@ jobs:
     steps:
       - run: echo "Deploy staging ${{ inputs.service }}"
   prod-deploy:
-    if: ${{ github.ref_type	== 'tag' }} 
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: 
       - build
       - staging-deploy
